@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои проекты — CRM for All & ViewNodeLab</title>
+    <meta name="description" content="Универсальная CRM для всех видов бизнеса и визуальный редактор автоматизаций ViewNodeLab.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+:root {
+    --bg: #0a0a14;
+    --text: #e8e8f4;
+    --muted: #9a9ab8;
+    --accent: #6366f1;
+    --accent2: #06b6d4;
+    --accent3: #a855f7;
+    --card: rgba(255,255,255,.04);
+    --card-border: rgba(255,255,255,.09);
+    --radius: 22px;
+    --fontDisplay: "Unbounded", sans-serif;
+    --fontBody: "Inter", sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+::selection { background: var(--accent); color:#fff; }
+html { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+body { font-family: var(--fontBody); background: var(--bg); color: var(--text); overflow-x:hidden; line-height:1.6; }
+
+/* Background */
+.bg-scene { position:fixed; inset:0; z-index:-2; overflow:hidden; }
+.blob { position:absolute; width:45vmax; height:45vmax; border-radius:50%; filter:blur(90px); opacity:.35; animation:drift 24s ease-in-out infinite alternate; }
+.blob-1 { background:radial-gradient(circle,#6366f1,transparent 65%); top:-15%; left:-10%; }
+.blob-2 { background:radial-gradient(circle,#06b6d4,transparent 65%); bottom:-20%; right:-10%; animation-delay:-8s; }
+.blob-3 { background:radial-gradient(circle,#a855f7,transparent 65%); top:40%; left:55%; animation-delay:-16s; opacity:.22; }
+@keyframes drift { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(6vw,-4vh) scale(1.15) rotate(20deg)} 100%{transform:translate(-5vw,5vh) scale(.95) rotate(-15deg)} }
+#particles { position:absolute; inset:0; width:100%; height:100%; opacity:.5; }
+.grid-overlay { position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px); background-size:56px 56px; mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,black 30%,transparent 75%); }
+
+.progress-bar { position:fixed; top:0; left:0; height:3px; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3)); z-index:200; }
+
+.glass { background:var(--card); border:1px solid var(--card-border); border-radius:var(--radius); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); transition:border-color .4s, transform .4s, box-shadow .4s; }
+.glass:hover { border-color:rgba(255,255,255,.2); box-shadow:0 20px 60px rgba(0,0,0,.35); }
+
+/* Navbar */
+.navbar { position:fixed; top:16px; left:50%; transform:translateX(-50%); z-index:100; width:min(1100px,94vw); border-radius:999px; background:rgba(10,10,20,.6); border:1px solid var(--card-border); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); transition:box-shadow .4s, background .4s; }
+.navbar.scrolled { box-shadow:0 10px 40px rgba(0,0,0,.45); background:rgba(10,10,20,.82); }
+.nav-inner { display:flex; align-items:center; justify-content:space-between; padding:10px 22px; }
+.logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
+.logo-badge { width:34px; height:34px; display:grid; place-items:center; border-radius:10px; font:800 .8rem var(--fontDisplay); background:linear-gradient(135deg,var(--accent),var(--accent3)); box-shadow:0 4px 14px rgba(99,102,241,.5); }
+.logo-text { font:600 .95rem var(--fontDisplay); }
+.logo-text span { color:var(--accent2); }
+.nav-links { display:flex; gap:30px; list-style:none; }
+.nav-links a { color:var(--muted); text-decoration:none; font-size:.92rem; position:relative; transition:color .3s; }
+.nav-links a::after { content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:2px; transition:width .3s; }
+.nav-links a:hover { color:var(--text); }
+.nav-links a:hover::after { width:100%; }
+.burger { display:none; background:none; border:none; cursor:pointer; flex-direction:column; gap:5px; }
+.burger span { width:22px; height:2px; background:var(--text); border-radius:2px; transition:.3s; }
+
+/* Hero */
+.hero { min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:120px 20px 60px; position:relative; }
+.hero-eyebrow { font-size:.85rem; letter-spacing:3px; text-transform:uppercase; color:var(--accent2); margin-bottom:20px; }
+.hero-title { font:clamp(2.2rem,6vw,4.4rem)/1.12 var(--fontDisplay); font-weight:800; margin-bottom:24px; }
+.gradient-text { background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3)); background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:shimmer 5s linear infinite; }
+@keyframes shimmer { to { background-position:200% 0; } }
+.hero-sub { max-width:640px; color:var(--muted); font-size:1.1rem; margin-bottom:40px; }
+.hero-buttons { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-bottom:60px; }
+.btn { display:inline-flex; align-items:center; gap:10px; padding:14px 30px; border-radius:999px; font-weight:600; text-decoration:none; font-size:.98rem; will-change:transform; transition:box-shadow .3s, background .3s, border-color .3s; }
+.btn-primary { color:#fff; background:linear-gradient(135deg,var(--accent),var(--accent3)); box-shadow:0 8px 30px rgba(99,102,241,.4); }
+.btn-primary:hover { box-shadow:0 12px 44px rgba(99,102,241,.6); }
+.btn-ghost { color:var(--text); border:1px solid var(--card-border); background:var(--card); }
+.btn-ghost:hover { border-color:var(--accent2); }
+.scroll-hint { position:absolute; bottom:26px; color:var(--muted); font-size:1.1rem; animation:bounce 2s infinite; text-decoration:none; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+.hero-marquee { width:min(1000px,92vw); overflow:hidden; border-block:1px solid var(--card-border); padding-block:14px; mask-image:linear-gradient(90deg,transparent,black 12%,black 88%,transparent); }
+.marquee-track { display:flex; gap:44px; width:max-content; animation:scrollX 22s linear infinite; }
+.marquee-track span { color:var(--muted); font-weight:500; white-space:nowrap; letter-spacing:1px; }
+.marquee-track i { color:var(--accent); font-size:.6rem; vertical-align:middle; margin-left:24px; }
+@keyframes scrollX { to { transform:translateX(-50%); } }
+
+/* Stats */
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; width:min(1100px,92vw); margin:0 auto; padding:40px 4px 40px; border-bottom:1px solid var(--card-border); }
+.stat-card { padding:34px 20px; text-align:center; }
+.stat-value { font:800 2.4rem var(--fontDisplay); background:linear-gradient(135deg,var(--accent2),var(--accent)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.stat-label { color:var(--muted); font-size:.92rem; margin-top:6px; }
+
+/* Sections */
+.section { width:min(1100px,92vw); margin:0 auto; padding:70px 4px; position:relative; }
+.section-head { text-align:center; margin-bottom:60px; }
+.section-eyebrow { color:var(--accent2); letter-spacing:2px; font-size:.85rem; margin-bottom:12px; }
+.section-title { font:clamp(1.7rem,4vw,2.7rem)/1.2 var(--fontDisplay); }
+
+/* Projects */
+.project { display:grid; grid-template-columns:1fr 1.4fr; gap:40px; align-items:center; padding:clamp(28px,5vw,56px); margin-bottom:50px; position:relative; overflow:hidden; }
+.project::before { content:""; position:absolute; inset:0; opacity:.12; background:linear-gradient(120deg,var(--c1),transparent 55%,var(--c2)); pointer-events:none; transition:opacity .5s; }
+.project:hover::before { opacity:.25; }
+.project:hover { transform:translateY(-6px); }
+.project:nth-of-type(2) .project-visual { order:2; }
+.project-visual { display:grid; place-items:center; min-height:260px; position:relative; }
+.visual-glow { position:absolute; width:75%; aspect-ratio:1; border-radius:50%; background:radial-gradient(circle,var(--c1),transparent 70%); filter:blur(50px); opacity:.45; animation:pulseGlow 5s ease-in-out infinite; }
+@keyframes pulseGlow { 50%{transform:scale(1.15);opacity:.65} }
+.orbit-wrap { position:relative; width:200px; height:200px; display:grid; place-items:center; }
+.project-icon { font-size:4.6rem; filter:drop-shadow(0 10px 30px rgba(0,0,0,.5)); z-index:2; }
+.orbit { position:absolute; inset:0; border:1px dashed var(--card-border); border-radius:50%; animation:spin 14s linear infinite; }
+.orbit-b { inset:26px; animation-duration:9s; animation-direction:reverse; border-color:var(--c1); }
+.orbit .dot { position:absolute; top:-5px; left:50%; width:10px; height:10px; border-radius:50%; background:var(--c2); box-shadow:0 0 12px var(--c2); }
+@keyframes spin { to{transform:rotate(360deg)} }
+.project-tag { display:inline-block; font-size:.78rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; padding:6px 16px; border-radius:999px; margin-bottom:16px; color:var(--text); background:linear-gradient(90deg,var(--c1),var(--c2)); }
+.project-name { font:700 1.9rem var(--fontDisplay); margin-bottom:14px; }
+.project-desc { color:var(--muted); margin-bottom:22px; }
+.project-features { list-style:none; margin-bottom:24px; display:grid; gap:10px; }
+.project-features li { display:flex; align-items:center; gap:12px; font-size:.95rem; }
+.project-features i { color:var(--c2); width:18px; text-align:center; }
+.stack-chips { display:flex; flex-wrap:wrap; gap:10px; }
+.chip { padding:7px 16px; border-radius:999px; font-size:.8rem; background:var(--card); border:1px solid var(--card-border); color:var(--muted); transition:.3s; }
+.chip:hover { color:var(--text); border-color:var(--c1); transform:translateY(-2px); }
+
+/* Tech */
+.stack-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:18px; }
+.tech-card { display:flex; flex-direction:column; align-items:center; gap:12px; padding:30px 10px; font-weight:600; font-size:.95rem; cursor:default; }
+.tech-card i { font-size:2.1rem; color:var(--accent2); transition:transform .4s, color .4s; }
+.tech-card:hover { transform:translateY(-6px) scale(1.03); }
+.tech-card:hover i { transform:scale(1.25) rotate(-8deg); color:var(--accent3); }
+
+/* About */
+.about { display:grid; grid-template-columns:1.2fr 1fr; gap:46px; padding:clamp(30px,5vw,56px); align-items:center; }
+.about h2 { font:700 1.8rem var(--fontDisplay); margin-bottom:18px; }
+.about p { color:var(--muted); margin-bottom:14px; }
+.about b { color:var(--text); }
+.terminal { background:#0d0d1c; border:1px solid var(--card-border); border-radius:16px; overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,.5); }
+.terminal-bar { display:flex; gap:8px; padding:12px 16px; background:rgba(255,255,255,.04); }
+.terminal-bar span { width:11px; height:11px; border-radius:50%; }
+.terminal-bar span:nth-child(1){background:#ff5f57} .terminal-bar span:nth-child(2){background:#febc2e} .terminal-bar span:nth-child(3){background:#28c840}
+.terminal pre { padding:22px 20px; font:.9rem/1.75 "Cascadia Code",Consolas,monospace; }
+.t-p { color:var(--accent2); font-weight:700; }
+.t-c { color:var(--muted); }
+.t-ok { color:#34d399; font-weight:700; }
+
+/* Contact */
+.contact-card { text-align:center; padding:clamp(36px,6vw,70px); }
+.contact-card .section-title { margin-bottom:16px; }
+.contact-card p { color:var(--muted); margin-bottom:32px; }
+.contact-buttons { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+
+.footer { text-align:center; padding:40px 20px 60px; color:var(--muted); font-size:.9rem; }
+.footer i { color:#f43f5e; }
+
+.reveal { opacity:0; will-change:transform,opacity; }
+
+@media (max-width:900px) {
+    .project, .about { grid-template-columns:1fr; }
+    .project:nth-of-type(2) .project-visual { order:0; }
+    .nav-links { position:absolute; top:calc(100% + 10px); right:0; flex-direction:column; padding:22px 34px; gap:20px; border-radius:20px; background:rgba(10,10,20,.95); border:1px solid var(--card-border); opacity:0; pointer-events:none; transform:translateY(-10px); transition:.35s; }
+    .nav-links.open { opacity:1; pointer-events:auto; transform:translateY(0); }
+    .burger { display:flex; }
+}
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar"></div>
+
+    <div class="bg-scene">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <canvas id="particles"></canvas>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a href="#hero" class="logo">
+                <span class="logo-badge">DV</span>
+                <span class="logo-text">Мои&nbsp;<span>Проекты</span></span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#projects">Проекты</a></li>
+                <li><a href="#stack">Технологии</a></li>
+                <li><a href="#about">Обо мне</a></li>
+                <li><a href="#contact">Контакт</a></li>
+            </ul>
+            <button class="burger" id="burger" aria-label="Меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="hero" id="hero">
+        <div class="hero-content">
+            <p class="hero-eyebrow" data-split>Разработчик автоматизаций и CRM-систем</p>
+            <h1 class="hero-title" data-split>Два продукта.<br><span class="gradient-text">Ноль ограничений.</span></h1>
+            <p class="hero-sub" data-split>
+                Универсальная CRM, которая работает офлайн у любого бизнеса —
+                и визуальная песочница нод, где автоматизации собираются мышкой.
+            </p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn btn-primary magnetic"><i class="fa-solid fa-rocket"></i> Смотреть проекты</a>
+                <a href="#contact" class="btn btn-ghost magnetic"><i class="fa-solid fa-paper-plane"></i> Связаться</a>
+            </div>
+            <div class="hero-marquee">
+                <div class="marquee-track">
+                    <span>CRM for All <i class="fa-solid fa-star-of-life"></i></span>
+                    <span>ViewNodeLab <i class="fa-solid fa-star-of-life"></i></span>
+                    <span>SQLite <i class="fa-solid fa-star-of-life"></i></span>
+                    <span>PyQt6 <i class="fa-solid fa-star-of-life"></i></span>
+                    <span>n8n Nodes <i class="fa-solid fa-star-of-life"></i></span>
+                    <span>Автоматизации <i class="fa-solid fa-star-of-life"></i></span>
+                    <span>CRM for All <i class="fa-solid fa-star-of-life"></i></span>
+                    <span>ViewNodeLab <i class="fa-solid fa-star-of-life"></i></span>
+                    <span>SQLite <i class="fa-solid fa-star-of-life"></i></span>
+                    <span>PyQt6 <i class="fa-solid fa-star-of-life"></i></span>
+                    <span>n8n Nodes <i class="fa-solid fa-star-of-life"></i></span>
+                    <span>Автоматизации <i class="fa-solid fa-star-of-life"></i></span>
+                </div>
+            </div>
+        </div>
+        <a href="#projects" class="scroll-hint"><i class="fa-solid fa-chevron-down"></i></a>
+    </header>
+
+    <section class="stats reveal">
+        <div class="stat-card glass"><div class="stat-value" data-count="400+">400+</div><div class="stat-label">интеграций в ViewNodeLab</div></div>
+        <div class="stat-card glass"><div class="stat-value" data-count="100%">100%</div><div class="stat-label">офлайн у CRM for All</div></div>
+        <div class="stat-card glass"><div class="stat-value" data-count="0">0</div><div class="stat-label">серверов и подписок</div></div>
+        <div class="stat-card glass"><div class="stat-value" data-count="∞">∞</div><div class="stat-label">автоматизаций</div></div>
+    </section>
+
+    <section class="section" id="projects">
+        <div class="section-head reveal">
+            <p class="section-eyebrow">// Портфолио</p>
+            <h2 class="section-title">Что я <span class="gradient-text">создал</span></h2>
+        </div>
+
+        <article class="project glass reveal" style="--c1: #6366f1; --c2: #a855f7;">
+            <div class="project-visual">
+                <div class="visual-glow"></div>
+                <div class="orbit-wrap">
+                    <div class="orbit orbit-a"><span class="dot"></span></div>
+                    <div class="orbit orbit-b"><span class="dot"></span></div>
+                    <div class="project-icon">📊</div>
+                </div>
+            </div>
+            <div class="project-info">
+                <span class="project-tag">Универсальная CRM</span>
+                <h3 class="project-name">CRM for All</h3>
+                <p class="project-desc">Локальная CRM-система, подходящая для любого вида бизнеса. Работает полностью офлайн: встроенный PHP и SQLite, без серверов и подписок. Задачи, клиенты, почта, модули и гибкая система лицензий.</p>
+                <ul class="project-features">
+                    <li><i class="fa-solid fa-briefcase"></i>Подходит для любого бизнеса</li>
+                    <li><i class="fa-solid fa-plug"></i>Встроенный PHP-runtime — ставится в 1 клик</li>
+                    <li><i class="fa-solid fa-database"></i>SQLite: база в одном файле</li>
+                    <li><i class="fa-solid fa-envelope"></i>Встроенная почта с 3-колоночным интерфейсом</li>
+                    <li><i class="fa-solid fa-puzzle-piece"></i>Модульная архитектура (loader.php)</li>
+                    <li><i class="fa-solid fa-key"></i>Схема лицензий и платежей</li>
+                </ul>
+                <div class="stack-chips">
+                    <span class="chip">PHP 8</span><span class="chip">SQLite</span><span class="chip">JavaScript</span><span class="chip">GridStack</span><span class="chip">Portability</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="project glass reveal" style="--c1: #06b6d4; --c2: #10b981;">
+            <div class="project-visual">
+                <div class="visual-glow"></div>
+                <div class="orbit-wrap">
+                    <div class="orbit orbit-a"><span class="dot"></span></div>
+                    <div class="orbit orbit-b"><span class="dot"></span></div>
+                    <div class="project-icon">🧩</div>
+                </div>
+            </div>
+            <div class="project-info">
+                <span class="project-tag">Визуальный редактор задач</span>
+                <h3 class="project-name">ViewNodeLab</h3>
+                <p class="project-desc">GUI для визуального программирования n8n-нод на PyQt6. Перетаскивай ноды, соединяй их и запускай автоматизации — сотни готовых интеграций: Telegram, Slack, Notion, OpenAI, Stripe и другие.</p>
+                <ul class="project-features">
+                    <li><i class="fa-solid fa-diagram-project"></i>Визуальный node-редактор на canvas</li>
+                    <li><i class="fa-solid fa-gears"></i>Движок исполнения потоков (engine.py)</li>
+                    <li><i class="fa-solid fa-shapes"></i>Сотни n8n-нод интеграций</li>
+                    <li><i class="fa-solid fa-globe"></i>HTTP Request, Webhook, триггеры</li>
+                    <li><i class="fa-brands fa-gitlab"></i>GitLab Trigger нода</li>
+                    <li><i class="fa-solid fa-code"></i>Декларативный формат нод (.node.json)</li>
+                </ul>
+                <div class="stack-chips">
+                    <span class="chip">Python</span><span class="chip">PyQt6</span><span class="chip">Node Engine</span><span class="chip">n8n Nodes</span><span class="chip">Visual Editor</span>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <section class="section" id="stack">
+        <div class="section-head reveal">
+            <p class="section-eyebrow">// Технологии</p>
+            <h2 class="section-title">Инструменты <span class="gradient-text">мастерской</span></h2>
+        </div>
+        <div class="stack-grid">
+            <div class="tech-card glass reveal" data-tilt><i class="fa-brands fa-php"></i><span>PHP 8</span></div>
+            <div class="tech-card glass reveal" data-tilt><i class="fa-solid fa-database"></i><span>SQLite</span></div>
+            <div class="tech-card glass reveal" data-tilt><i class="fa-brands fa-js"></i><span>JavaScript</span></div>
+            <div class="tech-card glass reveal" data-tilt><i class="fa-brands fa-python"></i><span>Python</span></div>
+            <div class="tech-card glass reveal" data-tilt><i class="fa-solid fa-window-maximize"></i><span>PyQt6</span></div>
+            <div class="tech-card glass reveal" data-tilt><i class="fa-brands fa-css3-alt"></i><span>CSS3</span></div>
+            <div class="tech-card glass reveal" data-tilt><i class="fa-solid fa-table-cells-large"></i><span>GridStack</span></div>
+            <div class="tech-card glass reveal" data-tilt><i class="fa-solid fa-diagram-project"></i><span>n8n Nodes</span></div>
+            <div class="tech-card glass reveal" data-tilt><i class="fa-solid fa-flask"></i><span>Flask</span></div>
+            <div class="tech-card glass reveal" data-tilt><i class="fa-brands fa-git-alt"></i><span>Git</span></div>
+        </div>
+    </section>
+
+    <section class="section" id="about">
+        <div class="about glass reveal">
+            <div class="about-text">
+                <h2><span class="gradient-text">Философия</span> простоты</h2>
+                <p>Я верю, что мощные инструменты не обязаны быть облачными и дорогими. <b>CRM for All</b> ставится одной кнопкой и живёт в одном файле базы — владелец бизнеса держит свои данные под рукой.</p>
+                <p><b>ViewNodeLab</b> превращает интеграцию сервисов в игру: собрал ноды, соединил стрелками — и рабочая автоматизация готова.</p>
+            </div>
+            <div class="terminal">
+                <div class="terminal-bar"><span></span><span></span><span></span></div>
+                <pre><code><span class="t-p">$</span> pip install viewnode-lab
+<span class="t-c">→ Загрузка нод... ✓ 400+ интеграций</span>
+
+<span class="t-p">$</span> CRM-for-All --start
+<span class="t-c">→ PHP runtime встроен... ✓</span>
+<span class="t-c">→ SQLite подключена ... ✓</span>
+<span class="t-ok">Готово. Бизнес работает.</span></code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="section contact" id="contact">
+        <div class="contact-card glass reveal">
+            <h2 class="section-title">Нужна <span class="gradient-text">автоматизация?</span></h2>
+            <p>Напишите — покажу демо, адаптирую CRM под ваш бизнес или соберу поток нод под задачу.</p>
+            <div class="contact-buttons">
+                <a href="mailto:you@example.com" class="btn btn-primary magnetic"><i class="fa-solid fa-envelope"></i> you@example.com</a>
+                <a href="https://max.ru" target="_blank" rel="noopener" class="btn btn-ghost magnetic"><i class="fa-solid fa-comments"></i> Написать в MAX</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2026 — CRM for All &amp; ViewNodeLab · GSAP · Lenis · <i class="fa-solid fa-heart"></i></p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+
+    <script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* Lenis smooth scroll */
+const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+lenis.on("scroll", ScrollTrigger.update);
+gsap.ticker.add((t) => lenis.raf(t * 1000));
+gsap.ticker.lagSmoothing(0);
+
+document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener("click", (e) => {
+        const target = document.querySelector(a.getAttribute("href"));
+        if (!target) return;
+        e.preventDefault();
+        lenis.scrollTo(target, { offset: -80, duration: 1.4 });
+        document.querySelector(".nav-links")?.classList.remove("open");
+    });
+});
+
+/* Navbar + burger */
+const navbar = document.getElementById("navbar");
+window.addEventListener("scroll", () => navbar.classList.toggle("scrolled", window.scrollY > 60));
+document.getElementById("burger").addEventListener("click", () => {
+    document.querySelector(".nav-links").classList.toggle("open");
+});
+
+/* Hero intro */
+document.querySelectorAll("[data-split]").forEach((el) => {
+    el.style.opacity = 1;
+    el.style.transform = "translateY(40px)";
+    el.style.filter = "blur(6px)";
+});
+gsap
+    .timeline({ delay: 0.15 })
+    .to("#navbar", { y: 0, opacity: 1, duration: 0.7, ease: "power3.out", startAt: { y: -70, opacity: 0 } }, 0)
+    .to(".hero-eyebrow", { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "power3.out" }, 0.1)
+    .to(".hero-title", { y: 0, opacity: 1, filter: "blur(0px)", duration: 1, ease: "power4.out" }, 0.22)
+    .to(".hero-sub", { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.9, ease: "power3.out" }, 0.44)
+    .from(".hero-buttons .btn", { y: 30, opacity: 0, stagger: 0.12, duration: 0.7, ease: "power3.out" }, 0.6)
+    .from(".hero-marquee", { opacity: 0, y: 24, duration: 0.9, ease: "power3.out" }, 0.75)
+    .from(".scroll-hint", { opacity: 0, duration: 0.8 }, 0.9);
+
+gsap.to(".hero-content", {
+    yPercent: -18, opacity: 0.25, ease: "none",
+    scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true },
+});
+
+/* Reveals */
+document.querySelectorAll(".reveal").forEach((el) => {
+    gsap.fromTo(el,
+        { y: 60, opacity: 0, filter: "blur(6px)" },
+        { y: 0, opacity: 1, filter: "blur(0px)", duration: 1, ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 85%", once: true } });
+});
+
+/* Progress bar */
+gsap.to(".progress-bar", {
+    width: "100%", ease: "none",
+    scrollTrigger: { trigger: document.body, start: "top top", end: "max", scrub: 0.3 },
+});
+
+/* Magnetic buttons */
+document.querySelectorAll(".magnetic").forEach((btn) => {
+    const strength = 0.35;
+    btn.addEventListener("mousemove", (e) => {
+        const r = btn.getBoundingClientRect();
+        gsap.to(btn, { x: (e.clientX - r.left - r.width/2) * strength, y: (e.clientY - r.top - r.height/2) * strength, duration: .4, ease: "power3.out" });
+    });
+    btn.addEventListener("mouseleave", () => gsap.to(btn, { x: 0, y: 0, duration: .6, ease: "elastic.out(1,0.5)" }));
+});
+
+/* Tilt cards */
+document.querySelectorAll("[data-tilt]").forEach((card) => {
+    card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        gsap.to(card, { rotateX: ((e.clientY - r.top)/r.height - .5) * -10, rotateY: ((e.clientX - r.left)/r.width - .5) * 10, transformPerspective: 700, duration: .4 });
+    });
+    card.addEventListener("mouseleave", () => gsap.to(card, { rotateX: 0, rotateY: 0, duration: .7, ease: "power3.out" }));
+});
+
+/* Counters */
+document.querySelectorAll("[data-count]").forEach((el) => {
+    const m = el.dataset.count.match(/^(\d+)(.*)$/);
+    if (!m) return;
+    const end = +m[1], suffix = m[2] || "";
+    const obj = { v: 0 };
+    ScrollTrigger.create({
+        trigger: el, start: "top 90%", once: true,
+        onEnter: () => gsap.to(obj, { v: end, duration: 1.8, ease: "power2.out",
+            onUpdate: () => (el.textContent = Math.round(obj.v) + suffix) }),
+    });
+});
+
+/* Particles */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+let W, H;
+const N = 70, LINK = 130, dpr = devicePixelRatio || 1;
+function resize() { W = canvas.width = canvas.offsetWidth * dpr; H = canvas.height = canvas.offsetHeight * dpr; }
+resize();
+window.addEventListener("resize", resize);
+const pts = Array.from({ length: N }, () => ({
+    x: Math.random()*2000, y: Math.random()*1200,
+    vx: (Math.random()-.5)*.35*dpr, vy: (Math.random()-.5)*.35*dpr,
+    r: (Math.random()*1.6+.6)*dpr,
+}));
+(function draw() {
+    ctx.clearRect(0,0,W,H);
+    for (const p of pts) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = "rgba(140,150,255,.65)"; ctx.fill();
+    }
+    for (let i = 0; i < N; i++)
+        for (let j = i+1; j < N; j++) {
+            const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+            const d = Math.hypot(dx, dy);
+            if (d < LINK*dpr) {
+                ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y);
+                ctx.strokeStyle = `rgba(120,130,255,${.42*(1-d/(LINK*dpr))})`;
+                ctx.lineWidth = dpr*.6; ctx.stroke();
+            }
+        }
+    requestAnimationFrame(draw);
+})();
+    </script>
+</body>
+</html>
